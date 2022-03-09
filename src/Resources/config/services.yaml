@@ -1,0 +1,59 @@
+parameters:
+    sourcecroc.access-control.refresh-route: token.refresh
+    sourcecroc.access-control.jwt-secret: '%env(APP_SECRET)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $jwtSecret: '%sourcecroc.access-control.jwt-secret%'
+
+    SourceCroc\AccessControlBundle\Controller\:
+        resource: '../../Controller/'
+
+    sourcecroc.access-control.testservice:
+        class: SourceCroc\AccessControlBundle\Service\TestService
+        arguments:
+            $blaat: '@sourcecroc.access-control.perm-provider'
+
+    SourceCroc\AccessControlBundle\Service\TestService:
+        alias: sourcecroc.access-control.testservice
+        public: true
+
+    sourcecroc.access-control.jwt-service:
+        class: SourceCroc\AccessControlBundle\Service\JwtService
+
+    SourceCroc\AccessControlBundle\Service\JwtService:
+        alias: sourcecroc.access-control.jwt-service
+        public: true
+
+    sourcecroc.access-control.user-provider:
+        class: SourceCroc\AccessControlBundle\Provider\UserProvider
+
+    SourceCroc\AccessControlBundle\Provider\UserProvider:
+        alias: sourcecroc.access-control.user-provider
+        public: true
+
+    sourcecroc.access-control.authenticator:
+        class: SourceCroc\AccessControlBundle\Security\JwtAuthenticator
+        arguments:
+            $refreshRoute: '%sourcecroc.access-control.refresh-route%'
+
+    SourceCroc\AccessControlBundle\Security\JwtAuthenticator:
+        alias: sourcecroc.access-control.authenticator
+        public: true
+
+    sourcecroc.access-control.jwt-signer:
+        class: SourceCroc\AccessControlBundle\Security\Token\JwtSigner
+
+    SourceCroc\AccessControlBundle\Security\Token\JwtSigner:
+        alias: sourcecroc.access-control.jwt-signer
+        public: true
+
+    sourcecroc.access-control.jwt-factory:
+        class: SourceCroc\AccessControlBundle\Factory\JwtFactory
+
+    SourceCroc\AccessControlBundle\Factory\JwtFactory:
+        alias: sourcecroc.access-control.jwt-factory
+        public: true

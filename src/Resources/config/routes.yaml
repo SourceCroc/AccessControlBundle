@@ -1,0 +1,3 @@
+sourcecroc.controllers:
+    resource: ../../Controller/
+    type: annotation

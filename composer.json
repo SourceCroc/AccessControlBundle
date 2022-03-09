@@ -1,0 +1,22 @@
+{
+    "name": "sourcecroc/access-control-bundle",
+    "description": "Permission and Role based Access Control bundle by SourceCroc",
+    "type": "symfony-bundle",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "SourceCroc",
+            "email": "info@sourcecroc.io"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SourceCroc\\AccessControlBundle\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "symfony/framework-bundle": ">=6.0.0",
+        "symfony/security-bundle": "^6.0"
+    }
+}
