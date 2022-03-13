@@ -2,7 +2,7 @@
 
 namespace SourceCroc\AccessControlBundle\DependencyInjection;
 
-use SourceCroc\AccessControlBundle\AccessControlConstants;
+use SourceCroc\AccessControlBundle\AccessControl;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -15,7 +15,7 @@ class AccessControlExtension extends Extension
 {
     public function getAlias(): string
     {
-        return AccessControlConstants::Alias;
+        return AccessControl::Alias;
     }
 
     public function load(array $configs, ContainerBuilder $container): void
@@ -28,5 +28,9 @@ class AccessControlExtension extends Extension
 
         $permissions = $userConfig['permissions']['provider'];
         $container->setAlias('sourcecroc.access-control.perm-provider', new Reference(substr($permissions, 1)));
+
+        $accessControlReference = $container->getDefinition(AccessControl::class);
+        $accessControlReference->setArgument('$authTokenTTL', $userConfig['authentication']['access_token_ttl']);
+        $accessControlReference->setArgument('$refreshTokenTTL', $userConfig['authentication']['refresh_token_ttl']);
     }
 }

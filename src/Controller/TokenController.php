@@ -25,4 +25,18 @@ class TokenController extends AbstractController
             'refresh' => $jwt->createRefresh($token)->toString(),
         ]);
     }
+
+    #[Route(path: '/token/refresh', name: 'sourcecroc.token.refresh', methods: ['POST'])]
+    public function refresh(UserInterface $user, JwtService $jwt): Response
+    {
+        $payload = [
+            'roles' => $user->getRoles(),
+        ];
+        $token = $jwt->create($user->getUserIdentifier(), $payload);
+
+        return new JsonResponse([
+            'token' => $token,
+            'refresh' => $jwt->createRefresh($token)->toString(),
+        ]);
+    }
 }

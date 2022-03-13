@@ -5,7 +5,7 @@ namespace SourceCroc\Migrations\AccessControlBundle;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Migrations\AbstractMigration;
-use SourceCroc\AccessControlBundle\AccessControlConstants;
+use SourceCroc\AccessControlBundle\AccessControl;
 
 final class Version161001012022 extends AbstractMigration
 {
@@ -16,7 +16,7 @@ final class Version161001012022 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $permissionTable = $schema->createTable(AccessControlConstants::PERMISSION_TABLE);
+        $permissionTable = $schema->createTable(AccessControl::PERMISSION_TABLE);
         $permissionTable->addColumn('id', Types::SMALLINT, ['unsigned' => true, 'autoincrement' => true]);
         $permissionTable->addColumn('identifier', Types::STRING, ['length' => 60]);
         $permissionTable->addColumn('name', Types::STRING, ['length' => 60]);
@@ -24,7 +24,7 @@ final class Version161001012022 extends AbstractMigration
         $permissionTable->addUniqueConstraint(['identifier'], 'UIX_IDENTIFIER');
         $permissionTable->addUniqueConstraint(['name'], 'UIX_NAME');
 
-        $roleTable = $schema->createTable(AccessControlConstants::ROLE_TABLE);
+        $roleTable = $schema->createTable(AccessControl::ROLE_TABLE);
         $roleTable->addColumn('id', Types::SMALLINT, ['unsigned' => true, 'autoincrement' => true]);
         $roleTable->addColumn('identifier', Types::STRING, ['length' => 60]);
         $roleTable->addColumn('name', Types::STRING, ['length' => 60]);
@@ -33,28 +33,28 @@ final class Version161001012022 extends AbstractMigration
         $roleTable->addUniqueConstraint(['identifier'], 'UIX_IDENTIFIER');
         $roleTable->addUniqueConstraint(['name'], 'UIX_NAME');
 
-        $userTable = $schema->createTable(AccessControlConstants::USER_TABLE);
+        $userTable = $schema->createTable(AccessControl::USER_TABLE);
         $userTable->addColumn('id', Types::BIGINT, ['unsigned' => true, 'autoincrement' => true]);
         $userTable->addColumn('username', Types::STRING, ['length' => 30]);
         $userTable->addColumn('secret', Types::STRING);
         $userTable->setPrimaryKey(['id'], 'PIX_ID');
         $userTable->addUniqueConstraint(['username'], 'UIX_USERNAME');
 
-        $userRolesTable = $schema->createTable(AccessControlConstants::USER_ROLE_TABLE);
+        $userRolesTable = $schema->createTable(AccessControl::USER_ROLE_TABLE);
         $userRolesTable->addColumn('user_id', TYPES::BIGINT, ['unsigned' => true]);
         $userRolesTable->addColumn('role_id', TYPES::SMALLINT, ['unsigned' => true]);
         $userRolesTable->setPrimaryKey(['user_id', 'role_id'], 'PIX_USER_ROLE');
         $userRolesTable->addForeignKeyConstraint($userTable, ['user_id'], ['id'], [], 'FK_USER_ROLE');
         $userRolesTable->addForeignKeyConstraint($roleTable, ['role_id'], ['id'], [], 'FK_ROLE_USER');
 
-        $rolePermissionsTable = $schema->createTable(AccessControlConstants::ROLE_PERMISSION_TABLE);
+        $rolePermissionsTable = $schema->createTable(AccessControl::ROLE_PERMISSION_TABLE);
         $rolePermissionsTable->addColumn('role_id', TYPES::SMALLINT, ['unsigned' => true]);
         $rolePermissionsTable->addColumn('permission_id', TYPES::SMALLINT, ['unsigned' => true]);
         $rolePermissionsTable->setPrimaryKey(['role_id', 'permission_id'], 'PIX_ROLE_PERMISSION');
         $rolePermissionsTable->addForeignKeyConstraint($roleTable, ['role_id'], ['id'], [], 'FK_ROLE_PERMISSION');
         $rolePermissionsTable->addForeignKeyConstraint($permissionTable, ['permission_id'], ['id'], [], 'FK_PERMISSION_ROLE');
 
-        $userPermissionsTable = $schema->createTable(AccessControlConstants::USER_PERMISSION_TABLE);
+        $userPermissionsTable = $schema->createTable(AccessControl::USER_PERMISSION_TABLE);
         $userPermissionsTable->addColumn('user_id', TYPES::BIGINT, ['unsigned' => true]);
         $userPermissionsTable->addColumn('permission_id', TYPES::SMALLINT, ['unsigned' => true]);
         $userPermissionsTable->setPrimaryKey(['user_id', 'permission_id'], 'PIX_USER_PERMISSION');
@@ -64,12 +64,12 @@ final class Version161001012022 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $schema->dropTable(AccessControlConstants::USER_PERMISSION_TABLE);
-        $schema->dropTable(AccessControlConstants::ROLE_PERMISSION_TABLE);
-        $schema->dropTable(AccessControlConstants::USER_ROLE_TABLE);
+        $schema->dropTable(AccessControl::USER_PERMISSION_TABLE);
+        $schema->dropTable(AccessControl::ROLE_PERMISSION_TABLE);
+        $schema->dropTable(AccessControl::USER_ROLE_TABLE);
 
-        $schema->dropTable(AccessControlConstants::USER_TABLE);
-        $schema->dropTable(AccessControlConstants::ROLE_TABLE);
-        $schema->dropTable(AccessControlConstants::PERMISSION_TABLE);
+        $schema->dropTable(AccessControl::USER_TABLE);
+        $schema->dropTable(AccessControl::ROLE_TABLE);
+        $schema->dropTable(AccessControl::PERMISSION_TABLE);
     }
 }

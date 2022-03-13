@@ -2,7 +2,7 @@
 
 namespace SourceCroc\AccessControlBundle;
 
-final class AccessControlConstants
+final class AccessControl
 {
     const Alias = 'sourcecroc_access-control';
     const SrcRoot = __DIR__;
@@ -15,7 +15,28 @@ final class AccessControlConstants
     const ROLE_PERMISSION_TABLE = '`sourcecroc/access-control/roles_permissions`';
     const USER_PERMISSION_TABLE = '`sourcecroc/access-control/users_permissions`';
 
-    private function __construct()
-    { /* Prevent making instances of this class */
+    private int $authTokenTTL;
+    private int $refreshTokenTTL;
+
+    public function __construct(int $authTokenTTL, int $refreshTokenTTL)
+    {
+        $this->authTokenTTL = $authTokenTTL;
+        $this->refreshTokenTTL = $refreshTokenTTL;
+    }
+
+    /**
+     * @return int TTL in seconds
+     */
+    public function getAuthTokenTTL(): int
+    {
+        return $this->authTokenTTL;
+    }
+
+    /**
+     * @return int TTL in seconds
+     */
+    public function getRefreshTokenTTL(): int
+    {
+        return $this->refreshTokenTTL;
     }
 }

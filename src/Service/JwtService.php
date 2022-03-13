@@ -3,6 +3,7 @@
 namespace SourceCroc\AccessControlBundle\Service;
 
 use http\Exception\InvalidArgumentException;
+use SourceCroc\AccessControlBundle\AccessControl;
 use SourceCroc\AccessControlBundle\Factory\JwtFactory;
 use SourceCroc\AccessControlBundle\Security\Jwt;
 use SourceCroc\AccessControlBundle\Security\Token\JwtSigner;
@@ -12,11 +13,13 @@ class JwtService
 {
     private JwtFactory $jwtFactory;
     private JwtSigner $signer;
+    private AccessControl $constants;
 
-    public function __construct(JwtFactory $jwtFactory, JwtSigner $signer)
+    public function __construct(JwtFactory $jwtFactory, JwtSigner $signer, AccessControl $constants)
     {
         $this->jwtFactory = $jwtFactory;
         $this->signer = $signer;
+        $this->constants = $constants;
     }
 
     public function validate(Jwt $jwt, ?Jwt $refreshToken = null): bool
@@ -38,12 +41,17 @@ class JwtService
         return $valid;
     }
 
+    /**
+     * @throws \Exception gets thrown when the configured ttl is invalid
+     */
     public function create(string $userIdentifier, array $payload): Jwt
     {
-        $datetime = new \DateTimeImmutable('now + 5 seconds', new \DateTimeZone('UTC'));
-        return $this->jwtFactory->create($datetime, $userIdentifier, $payload);
+        return $this->jwtFactory->create($this->constants->getAuthTokenTTL(), $userIdentifier, $payload);
     }
 
+    /**
+     * @throws \Exception gets thrown when the configured ttl is invalid
+     */
     public function createRefresh(Jwt $jwt): ?Jwt
     {
         if ($jwt->getHeader()->getType() === 'refresh') {
@@ -51,9 +59,13 @@ class JwtService
         }
 
         $userIdentifier = $jwt->getHeader()->getUserIdentifier();
-        $datetime = new \DateTimeImmutable('now + 10 seconds', new \DateTimeZone('UTC'));
+        $token = $this->jwtFactory->create(
+            $this->constants->getRefreshTokenTTL(),
+            $userIdentifier,
+            null,
+            'refresh'
+        );
 
-        $token = $this->jwtFactory->create($datetime, $userIdentifier, null, 'refresh');
         /** @var RefreshHeader $header */
         $header = $token->getHeader();
         $header->setForSignature($jwt->getSignature());

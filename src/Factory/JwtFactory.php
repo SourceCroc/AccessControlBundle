@@ -19,13 +19,22 @@ class JwtFactory
         $this->signer = $signer;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function create(
-        \DateTimeImmutable $eon,
+        int $ttl,
         string $userIdentifier,
         ?array $payloadData = null,
         string $type = 'auth',
     ): Jwt
     {
+        try {
+            $eon = new \DateTimeImmutable("now + $ttl seconds", new \DateTimeZone('UTC'));
+        } catch (\Exception $e) {
+            throw new \Exception('JwtFactory::create argument 1: $ttl is not a valid number');
+        }
+
         /** @var JwtHeaderInterface $header */
         $header = new ($type === 'auth' ? AuthHeader::class : RefreshHeader::class)($eon, $userIdentifier);
 

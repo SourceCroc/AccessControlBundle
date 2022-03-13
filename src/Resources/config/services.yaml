@@ -1,5 +1,5 @@
 parameters:
-    sourcecroc.access-control.refresh-route: token.refresh
+    sourcecroc.access-control.refresh-route: sourcecroc.token.refresh
     sourcecroc.access-control.jwt-secret: '%env(APP_SECRET)%'
 
 services:
@@ -9,17 +9,10 @@ services:
         bind:
             string $jwtSecret: '%sourcecroc.access-control.jwt-secret%'
 
+    SourceCroc\AccessControlBundle\AccessControl: ~
+
     SourceCroc\AccessControlBundle\Controller\:
         resource: '../../Controller/'
-
-    sourcecroc.access-control.testservice:
-        class: SourceCroc\AccessControlBundle\Service\TestService
-        arguments:
-            $blaat: '@sourcecroc.access-control.perm-provider'
-
-    SourceCroc\AccessControlBundle\Service\TestService:
-        alias: sourcecroc.access-control.testservice
-        public: true
 
     sourcecroc.access-control.jwt-service:
         class: SourceCroc\AccessControlBundle\Service\JwtService

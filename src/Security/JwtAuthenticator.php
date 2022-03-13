@@ -73,17 +73,6 @@ class JwtAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($request->get('_route') === $this->refreshRoute) {
-            $payload = [
-                'roles' => $token->getUser()->getRoles(),
-            ];
-
-            $token = $this->jwtService->create($token->getUserIdentifier(), $payload);
-            return new JsonResponse([
-                'token' => $token->toString(),
-                'refresh' => $this->jwtService->createRefresh($token)->toString(),
-            ]);
-        }
         return null;
     }
 

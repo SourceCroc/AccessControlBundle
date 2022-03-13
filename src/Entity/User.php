@@ -7,7 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use SourceCroc\AccessControlBundle\AccessControlConstants;
+use SourceCroc\AccessControlBundle\AccessControl;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -29,7 +29,7 @@ class User implements PermissionContainerInterface, UserInterface, PasswordAuthe
 
     #[ORM\ManyToMany(targetEntity: Role::class, inversedBy: 'users')]
     #[ORM\JoinTable(
-        name: AccessControlConstants::USER_ROLE_TABLE,
+        name: AccessControl::USER_ROLE_TABLE,
         joinColumns: [ new ORM\JoinColumn('user_id') ],
         inverseJoinColumns: [ new ORM\InverseJoinColumn('role_id') ],
     )]
@@ -38,7 +38,7 @@ class User implements PermissionContainerInterface, UserInterface, PasswordAuthe
 
     #[ORM\ManyToMany(targetEntity: Permission::class)]
     #[ORM\JoinTable(
-        name: AccessControlConstants::USER_PERMISSION_TABLE,
+        name: AccessControl::USER_PERMISSION_TABLE,
         joinColumns: [ new ORM\JoinColumn('user_id') ],
         inverseJoinColumns: [ new ORM\InverseJoinColumn('permission_id') ],
     )]
