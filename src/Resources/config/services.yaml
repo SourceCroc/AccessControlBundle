@@ -50,3 +50,10 @@ services:
     SourceCroc\AccessControlBundle\Factory\JwtFactory:
         alias: sourcecroc.access-control.jwt-factory
         public: true
+
+    sourcecroc.access-control.used-token-repository:
+        class: SourceCroc\AccessControlBundle\Repository\UsedTokenRepository
+
+    SourceCroc\AccessControlBundle\Repository\UsedTokenRepository:
+        alias: sourcecroc.access-control.used-token-repository
+        public: true

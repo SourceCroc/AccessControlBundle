@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\Migrations\AbstractMigration;
 use SourceCroc\AccessControlBundle\AccessControl;
 
-final class Version161001012022 extends AbstractMigration
+final class Version20220101160000 extends AbstractMigration
 {
     public function getDescription(): string
     {

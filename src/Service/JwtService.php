@@ -2,9 +2,11 @@
 
 namespace SourceCroc\AccessControlBundle\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use http\Exception\InvalidArgumentException;
 use SourceCroc\AccessControlBundle\AccessControl;
 use SourceCroc\AccessControlBundle\Factory\JwtFactory;
+use SourceCroc\AccessControlBundle\Repository\UsedTokenRepository;
 use SourceCroc\AccessControlBundle\Security\Jwt;
 use SourceCroc\AccessControlBundle\Security\Token\JwtSigner;
 use SourceCroc\AccessControlBundle\Security\Token\RefreshHeader;
@@ -14,12 +16,19 @@ class JwtService
     private JwtFactory $jwtFactory;
     private JwtSigner $signer;
     private AccessControl $constants;
+    private UsedTokenRepository $usedTokenRepository;
 
-    public function __construct(JwtFactory $jwtFactory, JwtSigner $signer, AccessControl $constants)
+    public function __construct(
+        JwtFactory          $jwtFactory,
+        JwtSigner           $signer,
+        AccessControl       $constants,
+        UsedTokenRepository $usedTokenRepository,
+    )
     {
         $this->jwtFactory = $jwtFactory;
         $this->signer = $signer;
         $this->constants = $constants;
+        $this->usedTokenRepository = $usedTokenRepository;
     }
 
     public function validate(Jwt $jwt, ?Jwt $refreshToken = null): bool
@@ -37,6 +46,10 @@ class JwtService
             $valid &= $refreshToken->stillValid();
             $valid &= $refreshToken->getSignature() === $this->signer->sign($header->toString());
         }
+
+        $encodedRefreshToken = $refreshToken?->toString();
+        $valid &= $this->usedTokenRepository->findBasedOnTokens($jwt->toString(), $encodedRefreshToken) === null;
+
         $valid &= $jwt->getSignature() === $this->signer->sign("$jwtHeader.$jwtPayload");
         return $valid;
     }
