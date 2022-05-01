@@ -34,6 +34,6 @@ class Version20220131150000 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $schema->dropTable('`sourcecroc/access-control/used_token');
+        $schema->dropTable('`sourcecroc/access-control/used_tokens');
     }
 }
