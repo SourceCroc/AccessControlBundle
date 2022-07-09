@@ -2,7 +2,6 @@
 
 namespace SourceCroc\AccessControlBundle\Tests\Unit\Command;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SourceCroc\AccessControlBundle\Command\InitializeAccessControl;
 use SourceCroc\AccessControlBundle\Entity\Permission;
@@ -35,7 +34,6 @@ final class InitializeAccessControlTest extends TestCase
 
     private function getPermissionProviderMock(): PermissionProviderInterface
     {
-        /** @var PermissionProviderInterface&MockObject $permissionProviderMock */
         $permissionProviderMock = $this->createMock(PermissionProviderInterface::class);
 
         $permissionProviderMock
@@ -50,7 +48,6 @@ final class InitializeAccessControlTest extends TestCase
 
     private function getPermissionRepositoryMock(): PermissionRepository
     {
-        /** @var PermissionRepository&MockObject $permissionRepositoryMock */
         $permissionRepositoryMock = $this->createMock(PermissionRepository::class);
 
         $permissionRepositoryMock
@@ -63,10 +60,20 @@ final class InitializeAccessControlTest extends TestCase
 
     private function getRoleRepositoryMock(): RoleRepository
     {
-        /** @var RoleRepository&MockObject $roleRepositoryMock */
         $roleRepositoryMock = $this->createMock(RoleRepository::class);
 
         return $roleRepositoryMock;
+    }
+
+    private function getOutputInterfaceMock(): OutputInterface
+    {
+        $outputInterfaceMock = $this->createMock(OutputInterface::class);
+
+        $outputBufferClosure = fn(string $text, int $level = 1) => array_push(self::$outputBuffer, $text);
+        $outputInterfaceMock->method('writeln')
+            ->willReturnCallback($outputBufferClosure);
+
+        return $outputInterfaceMock;
     }
 
     public function testInitializeAccessControlCommand()
@@ -81,20 +88,10 @@ final class InitializeAccessControlTest extends TestCase
             $roleRepositoryMock
         );
 
-        $iiMockBuilder = $this->getMockBuilder(InputInterface::class);
+        $iiMock = $this->createMock(InputInterface::class);
+        $outputInterfaceMock = $this->getOutputInterfaceMock();
 
-        /** @var InputInterface&MockObject $iiMock */
-        $iiMock = $iiMockBuilder->getMock();
-
-        $oiMockBuilder = $this->getMockBuilder(OutputInterface::class);
-
-        $outputBufferClosure = fn(string $text, int $level = 1) => array_push(self::$outputBuffer, $text);
-
-        /** @var OutputInterface&MockObject $oiMock */
-        $oiMock = $oiMockBuilder->getMock();
-        $oiMock->method('writeln')
-            ->willReturnCallback($outputBufferClosure);
-        $returnCode = $iacCommand->run($iiMock, $oiMock);
+        $returnCode = $iacCommand->run($iiMock, $outputInterfaceMock);
         $this->assertEquals(0, $returnCode);
 
         $this->assertEquals(1, count(self::$outputBuffer));

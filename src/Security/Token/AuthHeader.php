@@ -2,7 +2,6 @@
 
 namespace SourceCroc\AccessControlBundle\Security\Token;
 
-use SourceCroc\AccessControlBundle\Factory\JwtFactory;
 use SourceCroc\AccessControlBundle\Security\Jwt;
 
 class AuthHeader implements JwtHeaderInterface

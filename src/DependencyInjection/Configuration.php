@@ -2,14 +2,12 @@
 
 namespace SourceCroc\AccessControlBundle\DependencyInjection;
 
-require_once __DIR__.'/../../helpers/interval_to_seconds.php';
-
 use SourceCroc\AccessControlBundle\AccessControl;
+use SourceCroc\AccessControlBundle\Helper\TimeHelper;
 use SourceCroc\AccessControlBundle\Provider\PermissionProviderInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use function SourceCroc\Helpers\sourcecroc_interval_to_seconds;
 
 class Configuration implements ConfigurationInterface
 {
@@ -31,13 +29,13 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('access_token_ttl')
                             ->beforeNormalization()
-                                ->ifString()->then(sourcecroc_interval_to_seconds(...))
+                                ->ifString()->then(TimeHelper::writtenIntervalToSeconds(...))
                             ->end()
                             ->defaultValue(3600)
                         ->end()
                         ->scalarNode('refresh_token_ttl')
                             ->beforeNormalization()
-                                ->ifString()->then(sourcecroc_interval_to_seconds(...))
+                                ->ifString()->then(TimeHelper::writtenIntervalToSeconds(...))
                             ->end()
                             ->defaultValue(3600 * 8 * 14)
                         ->end()

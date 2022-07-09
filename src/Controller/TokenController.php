@@ -4,8 +4,6 @@ namespace SourceCroc\AccessControlBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use SourceCroc\AccessControlBundle\Entity\UsedToken;
-use SourceCroc\AccessControlBundle\Repository\UsedTokenRepository;
-use SourceCroc\AccessControlBundle\Security\Jwt;
 use SourceCroc\AccessControlBundle\Security\Token\AuthHeader;
 use SourceCroc\AccessControlBundle\Service\JwtService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

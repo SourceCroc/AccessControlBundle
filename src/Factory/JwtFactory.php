@@ -5,7 +5,9 @@ namespace SourceCroc\AccessControlBundle\Factory;
 use SourceCroc\AccessControlBundle\Security\Jwt;
 use SourceCroc\AccessControlBundle\Security\Token\AuthHeader;
 use SourceCroc\AccessControlBundle\Security\Token\AuthPayload;
+// phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use SourceCroc\AccessControlBundle\Security\Token\JwtHeaderInterface;
+// phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use SourceCroc\AccessControlBundle\Security\Token\JwtPayloadInterface;
 use SourceCroc\AccessControlBundle\Security\Token\JwtSigner;
 use SourceCroc\AccessControlBundle\Security\Token\RefreshHeader;

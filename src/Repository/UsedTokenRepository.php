@@ -3,7 +3,6 @@
 namespace SourceCroc\AccessControlBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use SourceCroc\AccessControlBundle\Entity\UsedToken;
@@ -19,7 +18,7 @@ class UsedTokenRepository extends ServiceEntityRepository
      * @param string $token
      * @param string|null $refresh
      * @return UsedToken|null
-     * @throws NonUniqueResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findBasedOnTokens(string $token, ?string $refresh): ?UsedToken
     {

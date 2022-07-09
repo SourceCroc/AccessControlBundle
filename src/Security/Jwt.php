@@ -2,7 +2,6 @@
 
 namespace SourceCroc\AccessControlBundle\Security;
 
-use SourceCroc\AccessControlBundle\Security\Token\AuthHeader;
 use SourceCroc\AccessControlBundle\Security\Token\JwtHeaderInterface;
 use SourceCroc\AccessControlBundle\Security\Token\JwtPayloadInterface;
 

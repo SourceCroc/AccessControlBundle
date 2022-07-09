@@ -3,7 +3,6 @@
 namespace SourceCroc\AccessControlBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use SourceCroc\AccessControlBundle\Entity\Permission;

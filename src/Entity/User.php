@@ -2,19 +2,14 @@
 
 namespace SourceCroc\AccessControlBundle\Entity;
 
-require_once __DIR__.'/../../helpers/get_parent_roles.php';
-
 use JetBrains\PhpStorm\Pure;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use SourceCroc\AccessControlBundle\AccessControl;
+use SourceCroc\AccessControlBundle\Helper\RoleHelper;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation as Serial;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use function SourceCroc\Helpers\sourcecroc_get_parent_roles;
 
 #[ORM\Entity]
 #[ORM\Table(name: AccessControl::USER_TABLE)]
@@ -182,7 +177,7 @@ class User implements PermissionContainerInterface, UserInterface, PasswordAuthe
     /** @return Role[] */
     public function getIndirectRoles(): array
     {
-        return sourcecroc_get_parent_roles($this->roles->toArray());
+        return RoleHelper::resolveParentRoles($this->roles->toArray());
     }
 
     public function eraseCredentials()

@@ -1,15 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace SourceCroc\Helpers;
+namespace SourceCroc\AccessControlBundle\Helper;
 
+use JetBrains\PhpStorm\Pure;
 use SourceCroc\AccessControlBundle\Entity\Role;
 
-if (!function_exists(__NAMESPACE__.'\\sourcecroc_get_parent_roles')) {
+abstract class RoleHelper
+{
     /**
      * @param Role[] $roles
      * @return Role[]
      */
-    function sourcecroc_get_parent_roles(array $roles): array
+    #[Pure]
+    public static function resolveParentRoles(array $roles): array
     {
         $parents = [];
         $higherLevelFound = false;

@@ -2,7 +2,6 @@
 
 namespace SourceCroc\AccessControlBundle\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use http\Exception\InvalidArgumentException;
 use SourceCroc\AccessControlBundle\AccessControl;
 use SourceCroc\AccessControlBundle\Factory\JwtFactory;
@@ -42,11 +41,12 @@ class JwtService
         if ($refreshToken === null) {
             $valid &= $jwt->stillValid();
         } else {
-            /** @var RefreshHeader $header */
             $header = $refreshToken->getHeader();
-            $valid &= $header->validFor($jwt->getSignature());
-            $valid &= $refreshToken->stillValid();
-            $valid &= $refreshToken->getSignature() === $this->signer->sign($header->toString());
+            if ($header instanceof RefreshHeader) {
+                $valid &= $header->validFor($jwt->getSignature());
+                $valid &= $refreshToken->stillValid();
+                $valid &= $refreshToken->getSignature() === $this->signer->sign($header->toString());
+            }
         }
 
         $encodedRefreshToken = $refreshToken?->toString();
