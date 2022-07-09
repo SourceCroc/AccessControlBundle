@@ -1,6 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Entity;
+
+require_once __DIR__.'/../../helpers/get_parent_roles.php';
 
 use JetBrains\PhpStorm\Pure;
 
@@ -10,9 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 use SourceCroc\AccessControlBundle\AccessControl;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation as Serial;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use function SourceCroc\Helpers\sourcecroc_get_parent_roles;
 
 #[ORM\Entity]
-#[ORM\Table(name: "`sourcecroc/access-control/users`")]
+#[ORM\Table(name: AccessControl::USER_TABLE)]
 #[ORM\MappedSuperclass]
 class User implements PermissionContainerInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -27,7 +32,7 @@ class User implements PermissionContainerInterface, UserInterface, PasswordAuthe
     #[ORM\Column(name: 'secret', type: 'string', length: 255)]
     private ?string $secret;
 
-    #[ORM\ManyToMany(targetEntity: Role::class, inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Role::class, inversedBy: 'users', fetch: 'EAGER')]
     #[ORM\JoinTable(
         name: AccessControl::USER_ROLE_TABLE,
         joinColumns: [ new ORM\JoinColumn('user_id') ],
@@ -36,7 +41,7 @@ class User implements PermissionContainerInterface, UserInterface, PasswordAuthe
     /** @var Collection<Role> $roles */
     private Collection $roles;
 
-    #[ORM\ManyToMany(targetEntity: Permission::class)]
+    #[ORM\ManyToMany(targetEntity: Permission::class, fetch: 'EAGER')]
     #[ORM\JoinTable(
         name: AccessControl::USER_PERMISSION_TABLE,
         joinColumns: [ new ORM\JoinColumn('user_id') ],
@@ -116,7 +121,8 @@ class User implements PermissionContainerInterface, UserInterface, PasswordAuthe
      * HERE STARTS ENTITY LOGIC
      * ######################## */
 
-    public function is(string $identifier): bool {
+    public function is(string $identifier): bool
+    {
         return $this->roles->filter(fn(Role $role) => $role->is($identifier))->count() > 0;
     }
 
@@ -131,7 +137,9 @@ class User implements PermissionContainerInterface, UserInterface, PasswordAuthe
                 ->filter(fn(Permission $perm) => $perm->getIdentifier() === (string)$permission)
                 ->count() > 0;
 
-        if ($hasPermAssigned) return true;
+        if ($hasPermAssigned) {
+            return true;
+        }
         return $this->roles->filter(fn(Role $role) => $role->hasPermission($permission))->count() > 0;
     }
 
@@ -140,9 +148,41 @@ class User implements PermissionContainerInterface, UserInterface, PasswordAuthe
         return $this->secret;
     }
 
-    public function getRoles(): array
+    /**
+     * Gets an objects (indirect)roles
+     * convents them to ROLE_{role} versions if argument $symfonyRoles is true (default)
+     *
+     * @param bool $symfonyRoles (default: true) should we transform it to an array of ROLE_* strings?
+     * @param bool $includeParents (default: true) should we include all parent roles?
+     * @return string[] | Role[] if $symfonyRoles == true then it is a string array otherwise it is an Role array
+     */
+    public function getRoles(bool $symfonyRoles = true, bool $includeParents = true): array
     {
-        return ['ROLE_USER'] + $this->roles->map(fn(RoleInterface $role) => 'ROLE_'.$role->getIdentifier())->toArray();
+        $allRoles = $this->roles->toArray();
+
+        if ($symfonyRoles) {
+            if ($includeParents) {
+                $parentRoles = $this->getIndirectRoles();
+                /** @var Role[] $totalRoles */
+                $allRoles = array_unique([...$allRoles, ...$parentRoles]);
+            }
+
+            return [...array_map(fn(Role $role) => 'ROLE_' . $role->getIdentifier(), $allRoles)];
+        }
+
+        return $this->roles->toArray();
+    }
+
+    /** @return Role[] */
+    public function getDirectRoles(): array
+    {
+        return $this->getRoles(false, false);
+    }
+
+    /** @return Role[] */
+    public function getIndirectRoles(): array
+    {
+        return sourcecroc_get_parent_roles($this->roles->toArray());
     }
 
     public function eraseCredentials()

@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    sourcecroc.access-control.user-provider:
+        class: SourceCroc\AccessControlBundle\Provider\UserProvider
+
+    SourceCroc\AccessControlBundle\Provider\UserProvider:
+        alias: sourcecroc.access-control.user-provider
+        public: true
+
+    SourceCroc\AccessControlBundle\Provider\PermissionProviderInterface:
+        alias: sourcecroc.access-control.permission-provider
+        public: true

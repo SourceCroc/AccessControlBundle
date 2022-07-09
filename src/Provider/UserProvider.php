@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Provider;
 
@@ -64,7 +64,9 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         $user = $this->userRepository->findOneBy(['username' => $identifier]);
-        if ($user === null) throw new UserNotFoundException();
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
         return $user;
     }
 }

@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Provider;
-
-use JetBrains\PhpStorm\ArrayShape;
 
 class ArrayPermissionProvider implements PermissionProviderInterface
 {

@@ -1,15 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
-use SourceCroc\AccessControlBundle\Entity\User;
 use SourceCroc\AccessControlBundle\Repository\UsedTokenRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RemoveExpiredUsedTokens extends Command
 {

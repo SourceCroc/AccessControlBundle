@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    sourcecroc.access-control.jwt-factory:
+        class: SourceCroc\AccessControlBundle\Factory\JwtFactory
+
+    SourceCroc\AccessControlBundle\Factory\JwtFactory:
+        alias: sourcecroc.access-control.jwt-factory
+        public: true
+
+    sourcecroc.access-control.user-factory:
+        class: SourceCroc\AccessControlBundle\Factory\UserFactory
+
+    SourceCroc\AccessControlBundle\Factory\UserFactory:
+        alias: sourcecroc.access-control.user-factory
+        public: true

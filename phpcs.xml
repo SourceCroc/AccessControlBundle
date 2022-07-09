@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<ruleset name="CodeStandard" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+    <config name="installed_paths" value="vendor/sourcecroc/php-code-style/src" />
+    <rule ref="SourceCrocStandard" />
+
+    <exclude-pattern>*/(vendor|var|Resources)</exclude-pattern>
+</ruleset>

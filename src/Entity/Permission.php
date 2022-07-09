@@ -1,13 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Entity;
 
 use JetBrains\PhpStorm\Pure;
-
 use Doctrine\ORM\Mapping as ORM;
+use SourceCroc\AccessControlBundle\AccessControl;
 
 #[ORM\Entity]
-#[ORM\Table(name: '`sourcecroc/access-control/roles`')]
+#[ORM\Table(name: AccessControl::PERMISSION_TABLE)]
 #[ORM\MappedSuperclass]
 class Permission implements PermissionInterface
 {
@@ -22,20 +22,24 @@ class Permission implements PermissionInterface
     #[ORM\Column(name: 'name', type: 'string', length: 60)]
     private string $name = 'missing-name';
 
-    public function getIdentifier(): string {
+    public function getIdentifier(): string
+    {
         return $this->identifier;
     }
 
-    public function setIdentifier(string $identifier): self {
+    public function setIdentifier(string $identifier): self
+    {
         $this->identifier = $identifier;
         return $this;
     }
 
-    public function getName(): string {
+    public function getName(): string
+    {
         return $this->name;
     }
 
-    public function setName(string $name): self {
+    public function setName(string $name): self
+    {
         $this->name = $name;
         return $this;
     }

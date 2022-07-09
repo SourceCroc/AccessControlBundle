@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Controller;
 
@@ -37,8 +37,7 @@ class TokenController extends AbstractController
         UserInterface $user,
         JwtService $jwt,
         EntityManagerInterface $em,
-    ): Response
-    {
+    ): Response {
         $authToken = str_replace('Bearer ', '', $request->headers->get('Authorization'));
         $refreshToken = $request->headers->get('X-Refresh-Token');
 

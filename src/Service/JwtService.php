@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Service;
 
@@ -14,17 +14,19 @@ use SourceCroc\AccessControlBundle\Security\Token\RefreshHeader;
 class JwtService
 {
     private JwtFactory $jwtFactory;
+
     private JwtSigner $signer;
+
     private AccessControl $constants;
+
     private UsedTokenRepository $usedTokenRepository;
 
     public function __construct(
-        JwtFactory          $jwtFactory,
-        JwtSigner           $signer,
-        AccessControl       $constants,
+        JwtFactory $jwtFactory,
+        JwtSigner $signer,
+        AccessControl $constants,
         UsedTokenRepository $usedTokenRepository,
-    )
-    {
+    ) {
         $this->jwtFactory = $jwtFactory;
         $this->signer = $signer;
         $this->constants = $constants;

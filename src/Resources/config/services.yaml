@@ -2,6 +2,9 @@ parameters:
     sourcecroc.access-control.refresh-route: sourcecroc.token.refresh
     sourcecroc.access-control.jwt-secret: '%env(APP_SECRET)%'
 
+#imports:
+#    - { resource: services/ }
+
 services:
     _defaults:
         autowire: true
@@ -24,13 +27,6 @@ services:
         alias: sourcecroc.access-control.jwt-service
         public: true
 
-    sourcecroc.access-control.user-provider:
-        class: SourceCroc\AccessControlBundle\Provider\UserProvider
-
-    SourceCroc\AccessControlBundle\Provider\UserProvider:
-        alias: sourcecroc.access-control.user-provider
-        public: true
-
     sourcecroc.access-control.authenticator:
         class: SourceCroc\AccessControlBundle\Security\JwtAuthenticator
         arguments:
@@ -45,18 +41,4 @@ services:
 
     SourceCroc\AccessControlBundle\Security\Token\JwtSigner:
         alias: sourcecroc.access-control.jwt-signer
-        public: true
-
-    sourcecroc.access-control.jwt-factory:
-        class: SourceCroc\AccessControlBundle\Factory\JwtFactory
-
-    SourceCroc\AccessControlBundle\Factory\JwtFactory:
-        alias: sourcecroc.access-control.jwt-factory
-        public: true
-
-    sourcecroc.access-control.used-token-repository:
-        class: SourceCroc\AccessControlBundle\Repository\UsedTokenRepository
-
-    SourceCroc\AccessControlBundle\Repository\UsedTokenRepository:
-        alias: sourcecroc.access-control.used-token-repository
         public: true

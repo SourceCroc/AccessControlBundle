@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Entity;
 
 use JetBrains\PhpStorm\Pure;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use SourceCroc\AccessControlBundle\AccessControl;
 
 #[ORM\Entity]
-#[ORM\Table(name: "`sourcecroc/access-control/roles`")]
+#[ORM\Table(name: AccessControl::ROLE_TABLE)]
 #[ORM\MappedSuperclass]
 class Role implements RoleInterface
 {
@@ -32,7 +32,7 @@ class Role implements RoleInterface
     /** @var Collection<User> $users */
     private Collection $users;
 
-    #[ORM\ManyToMany(targetEntity: Permission::class)]
+    #[ORM\ManyToMany(targetEntity: Permission::class, fetch: 'EAGER')]
     #[ORM\JoinTable(
         name: '`sourcecroc/access-control/roles_permissions',
         joinColumns: [ new ORM\JoinColumn('user_id') ],
@@ -72,6 +72,17 @@ class Role implements RoleInterface
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function extend(?Role $role): self
+    {
+        $this->extends = $role;
+        return $this;
+    }
+
+    public function getInheritsFrom(): ?Role
+    {
+        return $this->extends;
     }
 
     public function addUser(User $user): self
@@ -126,7 +137,9 @@ class Role implements RoleInterface
      */
     public function is(string $identifier): bool
     {
-        if ($this->identifier === $identifier) return true;
+        if ($this->identifier === $identifier) {
+            return true;
+        }
         return $this->extends !== null && $this->extends->is($identifier);
     }
 

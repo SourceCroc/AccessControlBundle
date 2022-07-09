@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\DependencyInjection;
 
 require_once __DIR__.'/../../helpers/interval_to_seconds.php';
 
 use SourceCroc\AccessControlBundle\AccessControl;
+use SourceCroc\AccessControlBundle\Provider\PermissionProviderInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -14,7 +15,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder(AccessControl::Alias);
+        $builder = new TreeBuilder(AccessControl::ALIAS);
         $root = $builder->getRootNode();
 
         $this->addPermissionSection($root);
@@ -45,7 +46,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('permissions')
                     ->children()
                         ->scalarNode('provider')
-                            ->info('Pass a service implementing SourceCroc\\AccessControlBundle\\Provider\\PermissionProviderInterface')
+                            ->info('Pass a service implementing '.PermissionProviderInterface::class)
                             ->isRequired()
                         ->end()
                     ->end()

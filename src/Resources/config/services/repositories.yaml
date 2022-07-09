@@ -1,0 +1,32 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    sourcecroc.access-control.used-token-repository:
+        class: SourceCroc\AccessControlBundle\Repository\UsedTokenRepository
+
+    SourceCroc\AccessControlBundle\Repository\UsedTokenRepository:
+        alias: sourcecroc.access-control.used-token-repository
+        public: true
+
+    sourcecroc.access-control.permission-repository:
+        class: SourceCroc\AccessControlBundle\Repository\PermissionRepository
+
+    SourceCroc\AccessControlBundle\Repository\PermissionRepository:
+        alias: sourcecroc.access-control.permission-repository
+        public: true
+
+    sourcecroc.access-control.role-repository:
+        class: SourceCroc\AccessControlBundle\Repository\RoleRepository
+
+    SourceCroc\AccessControlBundle\Repository\RoleRepository:
+        alias: sourcecroc.access-control.role-repository
+        public: true
+
+    sourcecroc.access-control.user-repository:
+        class: SourceCroc\AccessControlBundle\Repository\UserRepository
+
+    SourceCroc\AccessControlBundle\Repository\UserRepository:
+        alias: sourcecroc.access-control.user-repository
+        public: true

@@ -1,0 +1,46 @@
+name: Automated Tests
+on:
+    push:
+        branches:
+            - main
+            - develop
+            - 'release/**'
+    pull_request:
+
+jobs:
+    run-build:
+        permissions:
+            contents: read
+            packages: write
+        uses: ./.github/workflows/build-workflow.yml
+
+    lint:
+        needs: [ run-build ]
+        runs-on: ubuntu-latest
+        permissions:
+            packages: read
+        container:
+            image: ${{ needs.run-build.outputs.imageRef }}
+            credentials:
+                username: ${{ github.repository_owner }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+        steps:
+            - name: Run Linter
+              run: |
+                cd /app
+                composer lint
+    test:
+        needs: [ run-build ]
+        runs-on: ubuntu-latest
+        permissions:
+            packages: read
+        container:
+            image: ${{ needs.run-build.outputs.imageRef }}
+            credentials:
+                username: ${{ github.repository_owner }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+        steps:
+            - name: Run Tests
+              run: |
+                  cd /app
+                  composer test

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SourceCroc\AccessControlBundle\Factory;
 
@@ -27,8 +27,7 @@ class JwtFactory
         string $userIdentifier,
         ?array $payloadData = null,
         string $type = 'auth',
-    ): Jwt
-    {
+    ): Jwt {
         try {
             $eon = new \DateTimeImmutable("now + $ttl seconds", new \DateTimeZone('UTC'));
         } catch (\Exception $e) {
