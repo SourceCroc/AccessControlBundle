@@ -6862,16 +6862,16 @@
         },
         {
             "name": "sourcecroc/php-code-style",
-            "version": "0.1.5",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SourceCroc/php-code-style.git",
-                "reference": "bcbfd83eb8f619ab0e2bea86c6aabb3687164a56"
+                "reference": "d17d57a85c4f3fc87b2876d30592760bd68031a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SourceCroc/php-code-style/zipball/bcbfd83eb8f619ab0e2bea86c6aabb3687164a56",
-                "reference": "bcbfd83eb8f619ab0e2bea86c6aabb3687164a56",
+                "url": "https://api.github.com/repos/SourceCroc/php-code-style/zipball/d17d57a85c4f3fc87b2876d30592760bd68031a6",
+                "reference": "d17d57a85c4f3fc87b2876d30592760bd68031a6",
                 "shasum": ""
             },
             "require": {
@@ -6898,9 +6898,9 @@
             "description": "Code style used at SourceCroc",
             "support": {
                 "issues": "https://github.com/SourceCroc/php-code-style/issues",
-                "source": "https://github.com/SourceCroc/php-code-style/tree/0.1.5"
+                "source": "https://github.com/SourceCroc/php-code-style/tree/0.1.6"
             },
-            "time": "2022-07-09T13:10:20+00:00"
+            "time": "2022-07-09T13:39:45+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

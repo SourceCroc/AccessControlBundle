@@ -29,7 +29,7 @@ class AccessControlExtension extends Extension
         $userConfig = $this->processConfiguration($configuration, $configs);
 
         $permissions = $userConfig['permissions']['provider'];
-        $container->setAlias('sourcecroc.access-control.permission-provider', new Reference(substr($permissions, 1)));
+        $container->setAlias('sourcecroc.access-control.permission-provider', substr($permissions, 1));
 
         $accessControlReference = $container->getDefinition(AccessControl::class);
         $accessControlReference->setArgument('$authTokenTTL', $userConfig['authentication']['access_token_ttl']);
